@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドライブくじ - 使い方ガイド</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .step-number {
+            background-color: #EF4444; /* red-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto max-w-2xl p-4 sm:p-8">
+        <header class="text-center my-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-red-500 tracking-wider">使い方ガイド</h1>
+            <p class="text-gray-500 mt-2">「ドライブくじ」のシンプルな使い方</p>
+        </header>
+
+        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-8">
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-red-500 pl-4 mb-4">はじめに</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    「ドライブくじ」は、ドライブや旅行の際の面倒な座席決めを、簡単かつ公平に行うためのWebアプリです。<br>
+                    人数と名前を入力するだけで、誰がどこに座るかをランダムに決定します。
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-red-500 pl-4 mb-6">使い方ステップ</h2>
+                <div class="space-y-6">
+                    <!-- ステップ1 -->
+                    <div class="flex items-start space-x-4">
+                        <div class="step-number flex-shrink-0 w-10 h-10 rounded-full text-white text-xl font-bold flex items-center justify-center">1</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-700 mb-1">座席数と人数を設定</h3>
+                            <p class="text-gray-600">
+                                まず、車にある座席の数と、乗車する人数をそれぞれ入力します。<br>
+                                「+」と「-」ボタンで簡単に数を変更できます。
+                            </p>
+                        </div>
+                    </div>
+                    <!-- ステップ2 -->
+                    <div class="flex items-start space-x-4">
+                        <div class="step-number flex-shrink-0 w-10 h-10 rounded-full text-white text-xl font-bold flex items-center justify-center">2</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-700 mb-1">名前の入力と運転手の選択</h3>
+                            <p class="text-gray-600">
+                                設定した人数分の入力欄が表示されるので、参加者の名前を入力します。<br>
+                                運転する人が決まっている場合は、名前の右側にあるチェックボックスにチェックを入れてください。チェックは1人だけ選択できます。
+                            </p>
+                        </div>
+                    </div>
+                    <!-- ステップ3 -->
+                    <div class="flex items-start space-x-4">
+                        <div class="step-number flex-shrink-0 w-10 h-10 rounded-full text-white text-xl font-bold flex items-center justify-center">3</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-700 mb-1">くじを開始！</h3>
+                            <p class="text-gray-600">
+                                全員の名前を入力し、運転手を設定したら、「くじ開始」ボタンをタップ！<br>
+                                アプリが自動で座席を抽選します。
+                            </p>
+                        </div>
+                    </div>
+                     <!-- ステップ4 -->
+                    <div class="flex items-start space-x-4">
+                        <div class="step-number flex-shrink-0 w-10 h-10 rounded-full text-white text-xl font-bold flex items-center justify-center">4</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-700 mb-1">結果の確認</h3>
+                            <p class="text-gray-600">
+                                車の座席図と共に、抽選結果が表示されます。<br>
+                                運転手に指定された人は、自動的に運転席（右ハンドル車の運転席）に配置され、他のメンバーはランダムに残りの席に割り当てられます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

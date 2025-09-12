@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドライブくじ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: #F8F9FA;
+        }
+        /* カスタムスタイル */
+        .number-input-button {
+            transition: background-color 0.2s;
+        }
+        .number-input-button:hover {
+            background-color: #dc2626; /* red-600 */
+        }
+        .start-button {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .seat {
+            border: 2px solid #9CA3AF; /* gray-400 */
+            min-height: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .seat-driver {
+            border-color: #EF4444; /* red-500 */
+            background-color: #FEE2E2; /* red-100 */
+        }
+        .seat-name {
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        .driver-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+        }
+        #side-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- ハンバーガーメニューボタン -->
+    <button id="menu-button" class="fixed top-4 right-4 z-30 p-2 rounded-md bg-white shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+
+    <!-- サイドメニュー -->
+    <div id="side-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-40 transform translate-x-full">
+        <div class="p-5">
+            <button id="close-menu-button" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2 class="text-xl font-bold text-gray-800 mb-6">メニュー</h2>
+            <nav class="flex flex-col space-y-2">
+                <!-- 修正点: GASのコードを削除し、guide.htmlへの直接リンクに変更 -->
+                <a id="guide-link" href="guide.html" target="_blank" class="text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">使い方ガイド</a>
+                <a href="#" id="contact-link" class="text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">お問い合わせ</a>
+                <a href="#" id="release-notes-link" class="text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">リリースノート</a>
+                <p class="text-sm text-gray-400 absolute bottom-5">ver 1.0.3</p>
+            </nav>
+        </div>
+    </div>
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+
+
+    <div class="container mx-auto max-w-lg p-4 sm:p-6">
+        <!-- ヘッダー -->
+        <header class="text-center my-6">
+            <h1 class="text-4xl sm:text-5xl font-bold text-red-500 tracking-wider">ドライブくじ</h1>
+            <p class="text-gray-500 mt-2">車の座席をランダムに決めよう！</p>
+        </header>
+
+        <!-- 設定セクション -->
+        <main class="bg-white p-6 rounded-2xl shadow-lg space-y-6">
+            <!-- 座席数 -->
+            <div class="flex items-center justify-between">
+                <label for="seats_num" class="text-lg font-bold text-gray-700">座席数</label>
+                <div class="flex items-center space-x-2">
+                    <button onclick="updateNumberInput('seats_num', -1)" class="number-input-button w-10 h-10 bg-red-500 text-white text-2xl rounded-full flex items-center justify-center shadow-md">-</button>
+                    <input type="number" id="seats_num" name="seats_num" value="5" min="2" class="w-20 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                    <button onclick="updateNumberInput('seats_num', 1)" class="number-input-button w-10 h-10 bg-red-500 text-white text-2xl rounded-full flex items-center justify-center shadow-md">+</button>
+                </div>
+            </div>
+
+            <!-- 人数 -->
+            <div class="flex items-center justify-between">
+                <label for="people_num" class="text-lg font-bold text-gray-700">人数</label>
+                <div class="flex items-center space-x-2">
+                    <button onclick="updateNumberInput('people_num', -1)" class="number-input-button w-10 h-10 bg-red-500 text-white text-2xl rounded-full flex items-center justify-center shadow-md">-</button>
+                    <input type="number" id="people_num" name="people_num" value="4" min="1" class="w-20 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                    <button onclick="updateNumberInput('people_num', 1)" class="number-input-button w-10 h-10 bg-red-500 text-white text-2xl rounded-full flex items-center justify-center shadow-md">+</button>
+                </div>
+            </div>
+
+            <!-- 名前入力フォーム -->
+            <div id="lot_form" class="space-y-3">
+                <!-- ここに動的に入力フォームが生成されます -->
+            </div>
+
+            <!-- エラーメッセージ -->
+            <div id="error_message" class="text-red-600 font-bold text-center"></div>
+
+            <!-- くじ開始ボタン -->
+            <button id="start_lottery" class="start-button w-full bg-red-500 text-white text-xl font-bold py-4 rounded-xl shadow-lg">
+                くじ開始
+            </button>
+        </main>
+        
+        <!-- 結果表示フィールド -->
+        <section id="result_field" class="mt-8 bg-white p-6 rounded-2xl shadow-lg hidden">
+            <h2 class="text-2xl font-bold text-center text-red-500 mb-6">抽選結果</h2>
+            <div id="car_seats" class="space-y-4">
+                <!-- 車の座席がここに表示されます -->
+            </div>
+        </section>
+        
+        <footer class="text-center text-gray-400 text-sm mt-8 pb-4">
+            &copy; 2025 QcDa Project. All Rights Reserved.
+        </footer>
+    </div>
+
+    <script>
+        // DOM要素の取得
+        const peopleNumInput = document.getElementById('people_num');
+        const lotForm = document.getElementById('lot_form');
+        const startButton = document.getElementById('start_lottery');
+        const resultField = document.getElementById('result_field');
+        const errorMessage = document.getElementById('error_message');
+
+        // +/-ボタンの処理
+        function updateNumberInput(id, delta) {
+            const input = document.getElementById(id);
+            let value = parseInt(input.value) + delta;
+            if (value < parseInt(input.min)) {
+                value = input.min;
+            }
+            input.value = value;
+            if (id === 'people_num') {
+                generateNameInputs();
+            }
+        }
+        
+        peopleNumInput.addEventListener('change', generateNameInputs);
+
+        // 名前の入力フォームを動的に生成
+        function generateNameInputs() {
+            const peopleNum = parseInt(peopleNumInput.value) || 0;
+            lotForm.innerHTML = ''; // フォームを初期化
+
+            if (peopleNum > 0) {
+                const table = document.createElement('table');
+                table.className = "w-full text-sm text-left text-gray-500";
+                const thead = document.createElement('thead');
+                thead.className = "text-xs text-gray-700 uppercase bg-gray-50";
+                thead.innerHTML = `
+                    <tr>
+                        <th scope="col" class="px-4 py-3">名前</th>
+                        <th scope="col" class="px-4 py-3 text-center">運転手</th>
+                    </tr>
+                `;
+                table.appendChild(thead);
+                
+                const tbody = document.createElement('tbody');
+                for (let i = 0; i < peopleNum; i++) {
+                    const tr = document.createElement('tr');
+                    tr.className = "bg-white border-b";
+                    tr.innerHTML = `
+                        <td class="px-4 py-2">
+                            <input type="text" name="name_${i}" placeholder="名前 ${i + 1}" class="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500">
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            <input type="checkbox" name="driver_check" data-index="${i}" class="driver-checkbox w-6 h-6 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500">
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+                table.appendChild(tbody);
+                lotForm.appendChild(table);
+                
+                // チェックボックスのイベントリスナーを追加
+                document.querySelectorAll('.driver-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', handleDriverCheckbox);
+                });
+            }
+        }
+        
+        // 運転手チェックボックスの制御
+        function handleDriverCheckbox(event) {
+            if (event.target.checked) {
+                document.querySelectorAll('.driver-checkbox').forEach(checkbox => {
+                    if (checkbox !== event.target) {
+                        checkbox.checked = false;
+                    }
+                });
+            }
+        }
+
+        // くじ開始ボタンの処理
+        startButton.addEventListener('click', () => {
+            errorMessage.textContent = ''; // エラーメッセージをクリア
+            const seatsNum = parseInt(document.getElementById('seats_num').value);
+            const peopleNum = parseInt(peopleNumInput.value);
+
+            // バリデーション
+            if (peopleNum <= 0) {
+                errorMessage.textContent = '人数は1以上を入力してください。';
+                return;
+            }
+            if (seatsNum <= 1) {
+                errorMessage.textContent = '座席数は2以上を入力してください。';
+                return;
+            }
+            if (seatsNum < peopleNum) {
+                errorMessage.textContent = '座席数より人数が多いです。';
+                return;
+            }
+
+            // 参加者リストの作成
+            const participants = [];
+            for (let i = 0; i < peopleNum; i++) {
+                const nameInput = document.querySelector(`input[name="name_${i}"]`);
+                const name = nameInput.value.trim() === '' ? `メンバー ${i + 1}` : nameInput.value;
+                participants.push({ name: name, isDriver: false });
+            }
+
+            // 運転手の設定
+            let driver = null;
+            const driverCheckbox = document.querySelector('.driver-checkbox:checked');
+            if (driverCheckbox) {
+                const driverIndex = parseInt(driverCheckbox.dataset.index);
+                participants[driverIndex].isDriver = true;
+                driver = participants[driverIndex];
+                // 運転手を参加者リストから一時的に削除
+                participants.splice(driverIndex, 1);
+            }
+            
+            // 参加者をシャッフル
+            const shuffledParticipants = participants.sort(() => Math.random() - 0.5);
+
+            displayResults(driver, shuffledParticipants, seatsNum);
+        });
+
+        function displayResults(driver, passengers, seatsNum) {
+            const carSeats = document.getElementById('car_seats');
+            carSeats.innerHTML = '';
+
+            // 座席レイアウトの定義
+            const seatLayouts = {
+                2: [[2]], 3: [[3]], 4: [[2], [2]], 5: [[2], [3]], 6: [[2], [2], [2]],
+                7: [[2], [3], [2]], 8: [[2], [3], [3]], 9: [[1], [2], [3], [3]]
+            };
+            
+            let layout;
+            if (seatsNum <= 9) {
+                layout = seatLayouts[seatsNum];
+            } else {
+                layout = [[2]];
+                let remainingSeats = seatsNum - 2;
+                while (remainingSeats > 0) {
+                    const rowSeats = Math.min(remainingSeats, 3);
+                    layout.push([rowSeats]);
+                    remainingSeats -= rowSeats;
+                }
+            }
+
+            // --- 抽選ロジック ---
+            const passengerQueue = [...passengers];
+            const seatingArrangement = []; // {row, col, person} を格納
+
+            // 1. 運転席を確保
+            const firstRowSeatCount = layout[0][0];
+            if (driver) {
+                seatingArrangement.push({ row: 0, col: firstRowSeatCount - 1, person: driver });
+            }
+
+            // 2. 全ての乗客席をリストアップし、優先席と中間席に分ける
+            const prioritySeats = [];
+            const middleSeats = [];
+
+            layout.forEach((row, rowIndex) => {
+                const seatCount = row[0];
+                for (let colIndex = 0; colIndex < seatCount; colIndex++) {
+                    // 運転席はスキップ
+                    if (rowIndex === 0 && colIndex === firstRowSeatCount - 1 && driver) {
+                        continue;
+                    }
+                    const seat = { row: rowIndex, col: colIndex };
+                    if (seatCount === 3 && colIndex === 1) {
+                        middleSeats.push(seat);
+                    } else {
+                        prioritySeats.push(seat);
+                    }
+                }
+            });
+
+            // 3. 優先席に乗客を割り当て
+            prioritySeats.forEach(seat => {
+                if (passengerQueue.length > 0) {
+                    seatingArrangement.push({ ...seat, person: passengerQueue.shift() });
+                }
+            });
+
+            // 4. 中間席に残りの乗客を割り当て
+            middleSeats.forEach(seat => {
+                if (passengerQueue.length > 0) {
+                    seatingArrangement.push({ ...seat, person: passengerQueue.shift() });
+                }
+            });
+
+            // 描画処理
+            layout.forEach((row, rowIndex) => {
+                const rowDiv = document.createElement('div');
+                const seatCount = row[0];
+                rowDiv.className = `grid gap-2 grid-cols-${seatCount === 1 ? '1' : seatCount === 2 ? '2' : '3'} items-center`;
+                
+                if (seatCount === 3) rowDiv.classList.add('justify-around');
+
+                for(let colIndex = 0; colIndex < seatCount; colIndex++) {
+                    const seatDiv = document.createElement('div');
+                    seatDiv.className = 'seat flex flex-col items-center justify-center p-2 rounded-lg text-center';
+
+                    const seatedPerson = seatingArrangement.find(s => s.row === rowIndex && s.col === colIndex);
+
+                    if (seatedPerson) {
+                        const person = seatedPerson.person;
+                        
+                        const isDesignatedDriver = person.isDriver;
+                        const isDefaultDriver = !driver && rowIndex === 0 && colIndex === (firstRowSeatCount - 1);
+
+                        if (isDesignatedDriver || isDefaultDriver) {
+                            seatDiv.classList.add('seat-driver');
+                            seatDiv.innerHTML = `
+                                <svg class="driver-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path fill="#EF4444" d="M344 0H168c-13.3 0-24 10.7-24 24v80c0 13.3 10.7 24 24 24h176c13.3 0 24-10.7 24-24V24c0-13.3-10.7-24-24-24zM128 224v-32c0-17.7-14.3-32-32-32s-32 14.3-32 32v32c0 17.7 14.3 32 32 32s32-14.3 32-32zm352 96h-32c-17.7 0-32-14.3-32-32v-32c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v32c0 17.7-14.3 32-32 32zM256 160c-106 0-192 86-192 192s86 192 192 192 192-86 192-192-86-192-192-192zm0 320c-70.7 0-128-57.3-128-128s57.3-128 128-128 128 57.3 128 128-57.3 128-128 128z"/>
+                                </svg>
+                                <span class="seat-name">${person.name}</span>
+                                <span class="text-xs text-red-500">運転手</span>`;
+                        } else {
+                           seatDiv.innerHTML = `<span class="seat-name">${person.name}</span>`;
+                        }
+                    } else {
+                        seatDiv.innerHTML = `<span class="text-gray-400">空席</span>`;
+                    }
+                    rowDiv.appendChild(seatDiv);
+                }
+                carSeats.appendChild(rowDiv);
+            });
+
+            resultField.classList.remove('hidden');
+            resultField.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ハンバーガーメニューのロジック
+        const menuButton = document.getElementById('menu-button');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const sideMenu = document.getElementById('side-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        function openMenu() {
+            sideMenu.classList.remove('translate-x-full');
+            menuOverlay.classList.remove('hidden');
+        }
+
+        function closeMenu() {
+            sideMenu.classList.add('translate-x-full');
+            menuOverlay.classList.add('hidden');
+        }
+
+        menuButton.addEventListener('click', openMenu);
+        closeMenuButton.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+
+        // 外部リンクのダミー設定
+        document.getElementById('contact-link').addEventListener('click', (e) => {
+            e.preventDefault(); alert('お問い合わせ先のURLを設定してください。');
+        });
+        document.getElementById('release-notes-link').addEventListener('click', (e) => {
+            e.preventDefault(); alert('リリースノートのURLを設定してください。');
+        });
+        
+        // 初期表示
+        window.addEventListener('DOMContentLoaded', () => {
+            generateNameInputs();
+        });
+
+    </script>
+</body>
+</html>
