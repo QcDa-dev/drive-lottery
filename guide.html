@@ -14,11 +14,50 @@
         .step-number {
             background-color: #EF4444; /* red-500 */
         }
+        #side-menu {
+            transition: transform 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-20">
+        <div class="container mx-auto max-w-lg p-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-red-500 tracking-wider">ドライブくじ</a>
+            <button id="menu-button" class="z-30 p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Menu -->
+    <div id="side-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform translate-x-full">
+        <div class="p-5">
+             <button id="close-menu-button" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2 class="text-xl font-bold text-gray-800 mb-6 mt-6">メニュー</h2>
+            <nav>
+                <ul class="space-y-1">
+                    <li><a href="guide.html" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">使い方ガイド</a></li>
+                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSclZpXo2Cc3PEd8ChbM0y56Hw9coV0W1k2sODX-z_2L5rQOKg/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">お問い合わせ</a></li>
+                    <li><a href="release-notes.html" target="_blank" rel="noopener noreferrer" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">リリースノート</a></li>
+                    <li class="border-t my-2"></li>
+                    <li><a href="https://qcda-dev.github.io/HP/" target="_blank" rel="noopener noreferrer" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">QcDa Projectとは</a></li>
+                </ul>
+            </nav>
+            <p class="text-sm text-gray-400 absolute bottom-5 left-5">ver 2.0.0</p>
+        </div>
+    </div>
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
     <div class="container mx-auto max-w-2xl p-4 sm:p-8">
-        <header class="text-center my-8">
+        <header class="text-center my-8 pt-6">
             <h1 class="text-4xl sm:text-5xl font-bold text-red-500 tracking-wider">使い方ガイド</h1>
             <p class="text-gray-500 mt-2">「ドライブくじ」のシンプルな使い方</p>
         </header>
@@ -82,6 +121,33 @@
                 </div>
             </section>
         </main>
+        
+        <footer class="text-center text-gray-400 text-sm mt-8 pb-4">
+            &copy; 2025 QcDa Project. All Rights Reserved.
+        </footer>
     </div>
+    
+    <script>
+        // Hamburger Menu Logic
+        const menuButton = document.getElementById('menu-button');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const sideMenu = document.getElementById('side-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        function openMenu() {
+            sideMenu.classList.remove('translate-x-full');
+            menuOverlay.classList.remove('hidden');
+        }
+
+        function closeMenu() {
+            sideMenu.classList.add('translate-x-full');
+            menuOverlay.classList.add('hidden');
+        }
+
+        menuButton.addEventListener('click', openMenu);
+        closeMenuButton.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+    </script>
 </body>
 </html>
+
