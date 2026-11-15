@@ -3,116 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>リリースノート - ドライブくじ</title>
+    <title>リリースノート｜ドライブくじ</title>
+    <meta name="description" content="ドライブくじのリリースノート（更新履歴）。追加された機能や修正内容を確認できます。">
+    <meta name="keywords" content="ドライブくじ,リリースノート,更新履歴,QcDa Project">
+    <meta name="author" content="QcDa Project">
+    <meta name="robots" content="index, follow">
+
+    <!-- アイコン (favicon.ico / icon.svg / apple-touch-icon.png をリポジトリ直下に置くと反映されます) -->
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
-    <!-- marked.js for Markdown to HTML conversion -->
+    <link rel="stylesheet" href="common.css">
+    <!-- marked.js: GitHub Releases の Markdown を HTML に変換 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        body {
-            font-family: 'M PLUS Rounded 1c', sans-serif;
-            background-color: #F8F9FA;
-        }
-        #side-menu {
-            transition: transform 0.3s ease-in-out;
-        }
-        /* Styles for release note content */
-        .release-content h1, .release-content h2, .release-content h3 { @apply text-xl font-bold mt-4 mb-2 border-b pb-1 border-gray-200; }
-        .release-content ul { @apply list-disc list-inside ml-4 space-y-1; }
-        .release-content li { @apply mb-1; }
-        .release-content p { @apply mb-2 leading-relaxed; }
-        .release-content a { @apply text-red-600 hover:underline; }
-    </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-20">
-        <div class="container mx-auto max-w-lg p-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-red-500 tracking-wider">ドライブくじ</a>
-            <button id="menu-button" class="z-30 p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </div>
-    </header>
-
-    <!-- Side Menu -->
-    <div id="side-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform translate-x-full">
-        <div class="p-5">
-             <button id="close-menu-button" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <h2 class="text-xl font-bold text-gray-800 mb-6 mt-6">メニュー</h2>
-            <nav>
-                <ul class="space-y-1">
-                    <li><a href="guide.html" target="_blank" rel="noopener noreferrer" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">使い方ガイド</a></li>
-                    <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdlvIr5ehyy3dInl_XTkA5F64H7yFIigL2dzFW0IoXnl8ajdw/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">お問い合わせ</a></li>
-                    <li><a href="release-notes.html" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">リリースノート</a></li>
-                    <li class="border-t my-2"></li>
-                    <li><a href="https://qcda-dev.github.io/HP/" target="_blank" rel="noopener noreferrer" class="block text-lg text-gray-700 hover:bg-red-50 p-3 rounded-md transition-colors">QcDa Projectとは</a></li>
-                </ul>
-            </nav>
-            <p class="text-sm text-gray-400 absolute bottom-5 left-5">ver 2.0.0</p>
-        </div>
-    </div>
-    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <div id="qcda-header"></div>
+    <div id="qcda-menu"></div>
 
     <main class="container mx-auto max-w-2xl p-4 sm:p-8">
-         <div class="pt-6">
+        <div class="pt-6">
             <header class="text-center my-8">
                 <h1 class="text-4xl sm:text-5xl font-bold text-red-500 tracking-wider">リリースノート</h1>
             </header>
             <div id="release-notes-container" class="space-y-8">
-                <!-- Release notes will be loaded here -->
+                <!-- GitHub Releases の内容がここに表示されます -->
             </div>
-             <!-- Loading Indicator -->
+            <!-- 読み込み中の表示 -->
             <div id="loadingIndicator" class="text-center py-10">
-                 <svg class="animate-spin h-8 w-8 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg class="animate-spin h-8 w-8 text-red-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                </svg>
                 <p class="mt-2 text-gray-600">読み込み中...</p>
             </div>
         </div>
     </main>
 
-    <footer class="text-center text-gray-400 text-sm mt-8 pb-4">
-        &copy; 2025 QcDa Project. All Rights Reserved.
-    </footer>
+    <div id="qcda-footer"></div>
 
+    <script src="common.js"></script>
     <script>
-        // Hamburger Menu Logic
-        const menuButton = document.getElementById('menu-button');
-        const closeMenuButton = document.getElementById('close-menu-button');
-        const sideMenu = document.getElementById('side-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-
-        function openMenu() {
-            sideMenu.classList.remove('translate-x-full');
-            menuOverlay.classList.remove('hidden');
-        }
-
-        function closeMenu() {
-            sideMenu.classList.add('translate-x-full');
-            menuOverlay.classList.add('hidden');
-        }
-
-        menuButton.addEventListener('click', openMenu);
-        closeMenuButton.addEventListener('click', closeMenu);
-        menuOverlay.addEventListener('click', closeMenu);
-        
-        // GitHub Release Notes Fetcher
+        // GitHub Releases からリリースノートを取得して表示 (取得元は common.js の QCDA_CONFIG.repo)
         document.addEventListener('DOMContentLoaded', () => {
-            const GITHUB_USER = 'qcda-dev';
-            const GITHUB_REPO = 'drive-lottery';
-
+            const { user, name } = QcDa.config.repo;
             const container = document.getElementById('release-notes-container');
             const loadingIndicator = document.getElementById('loadingIndicator');
-            const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases`;
+            const apiUrl = `https://api.github.com/repos/${user}/${name}/releases`;
 
             fetch(apiUrl)
                 .then(response => {
@@ -129,20 +70,17 @@
                     }
 
                     releases.forEach(release => {
-                        const releaseDate = new Date(release.published_at).toLocaleDateString('ja-JP');
-                        
+                        const releaseDate = new Date(release.published_at || release.created_at).toLocaleDateString('ja-JP');
+                        const releaseBodyHtml = marked.parse(release.body || '');
+
                         const releaseElement = document.createElement('div');
                         releaseElement.className = 'bg-white p-6 rounded-2xl shadow-lg';
-                        
-                        // Use marked.js to parse Markdown body
-                        const releaseBodyHtml = marked.parse(release.body);
-
                         releaseElement.innerHTML = `
                             <div class="flex justify-between items-center mb-3 border-b pb-3">
-                                <h3 class="text-2xl font-bold text-gray-800">${release.name || release.tag_name}</h3>
+                                <h2 class="text-2xl font-bold text-gray-800">${QcDa.escapeHtml(release.name || release.tag_name)}</h2>
                                 <span class="text-sm text-gray-500 flex-shrink-0 ml-4">${releaseDate}</span>
                             </div>
-                            <div class="release-content text-gray-700">${releaseBodyHtml}</div>
+                            <div class="qc-release-content text-gray-700">${releaseBodyHtml}</div>
                         `;
                         container.appendChild(releaseElement);
                     });
